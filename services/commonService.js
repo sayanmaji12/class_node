@@ -1,5 +1,6 @@
-// const formidable = require('formidable');
+const formidable = require('formidable');
 const fs = require('fs');
+var root = "/home/sm/Node_Js/class/public/upload"
 // const dotenv = require('dotenv');
 // dotenv.config();
 // var root = process.env.UPLOAD_dir; 
@@ -66,31 +67,24 @@ module.exports.sendResponse = (success = true, status = 200, message = '', respo
     }
 }
 
-// module.exports.uploadFile = (req) => {
-//     return new Promise((resolve, reject) => {
-//         console.log(req)
-//         const form = formidable({multiples: true, uploadDir: root});
-//         let filename = '';
-//         let extenction= '';
-//         form.on('file', function(field, file) {
-//             //rename the incoming file to the file's name
-//             const timestamp = new Date().getTime();
-//             // console.log(file.originalFilename)
-//             // console.log(field)
-//              let fileExplode = file.originalFilename.split('.');
-             
-//             filename = fileExplode[0] +'_'+ timestamp + '.'+fileExplode[1] ;
-//             extenction= fileExplode[1];
-//             //console.log(filename)
-//             fs.rename(file.filepath, form.uploadDir + "/" + filename, (err) => {
-//                 console.log('file error >> ', err);
-//             });
-//         });
-//         form.parse(req, (err, fields, files) => {
-//             const data = fields;
-//             data['fileName'] = filename;
-//             data['extenction']=extenction;
-//             resolve(data);
-//         });
-//     });
-// }
+module.exports.uploadFile = (req) => {
+    return new Promise((resolve, reject) => {
+        const from = formidable({multiples:true,uploadDir:root})
+        console.log(root)
+        let fileName = '';
+        from.on('file',function(field,file){
+            const timestamp = new Date().getTime();
+            
+            let fileExplode = file.originalFilename.split('.')
+            console.log(fileExplode)
+            fileName = fileExplode[0]+'_'+timestamp+'.'+fileExplode[1]
+            fs.rename(file.filepath,from.uploadDir+"/"+fileName,(err)=>{
+                console.log('File Error >>',err)
+            })
+        })
+        from.parse(req,(err,fields,files)=>{
+            data ={"success":true,"fileName":fileName}
+            resolve(data);
+        })
+    });
+}
