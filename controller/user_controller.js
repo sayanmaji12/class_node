@@ -38,7 +38,7 @@ router.post('/addUser', async (req, res) => {
 		} else {
 			req.body.password = md5(req.body.password)
 			const result = await dao.addUser(req.body);
-			console.log(result)
+			//console.log(result)
 			if (result.error) {
 				res.send(common.sendResponse(false, 0, 'Some error occurred', null, 500));
 			} else {
@@ -57,7 +57,7 @@ router.post('/allUsers', async (req, res) => {
 	try{
 		
 		const result = await dao.allUsers(req.body);
-		console.log(result)
+		//console.log(result)
 		if (result.error) {
 			res.send(common.sendResponse(false, 0, 'Some error occurred', null, 500));
 		} else {
