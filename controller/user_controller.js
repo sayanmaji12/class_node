@@ -71,3 +71,21 @@ router.post('/allUsers', async (req, res) => {
         res.send(common.sendResponse(false, 0, 'Something went wrong. Please try again.', null, 1002));
 	}
 });
+router.post('/allRoles', async (req, res) => {
+	try{
+		
+		const result = await dao.allRoles();
+		//console.log(result)
+		if (result.error) {
+			res.send(common.sendResponse(false, 0, 'Some error occurred', null, 500));
+		} else {
+			let message = '';
+			
+			res.send(common.sendResponse(true, 1, message, result, 0));
+			
+		}
+	} catch(e) {
+        console.log(e)
+        res.send(common.sendResponse(false, 0, 'Something went wrong. Please try again.', null, 1002));
+	}
+});

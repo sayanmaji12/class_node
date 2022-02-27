@@ -87,7 +87,7 @@ module.exports.allUsers  = (data) => {
 function getRole(userId){
 	return new Promise((resolve, reject) => {
 		try {
-			var sql1 	=	"select role_id from user_role_map where user_id="+userId+"";
+			var sql1 	=	"SELECT map.role_id,role.role_name FROM user_role_map map,role_master role WHERE map.role_id=role.id AND user_id="+userId+"";
 			db.connection.query(sql1,function (err1, success1){
 				if(!err1){
 					resolve(success1)
@@ -95,6 +95,24 @@ function getRole(userId){
 				
 			});
 		}catch(e){
+			console.log(e);
+			resolve('500');
+		}
+	});
+}
+module.exports.allRoles  = () => {
+	return new Promise((resolve, reject) => {
+		try {
+			var sql 	=	"SELECT id as role_id,role_name FROM `role_master` WHERE `is_delete`=0";
+			db.connection.query(sql,async function (err, success){
+                if (err) {
+                    resolve(common.errorResolve(err))
+                } else {
+                    
+                    resolve(success)
+                }
+            });
+		} catch (e) {
 			console.log(e);
 			resolve('500');
 		}
