@@ -89,3 +89,58 @@ router.post('/allRoles', async (req, res) => {
         res.send(common.sendResponse(false, 0, 'Something went wrong. Please try again.', null, 1002));
 	}
 });
+router.post('/addInventory', async (req, res) => {
+	try{
+		Inventory = {
+			"item" : req.body.item,
+			//"instock" : req.body.instock
+		}
+		Inventory.instock= await addStocks(req.body.instock);
+		// for (let item of  req.body.instock){
+		// 	Inventory.instock=[]
+		// 	Inventory.instock.push(item);
+		// }
+		
+		const result = await dao.addInventory(Inventory);
+		//console.log(result)
+		if (result.error) {
+			res.send(common.sendResponse(false, 0, 'Some error occurred', null, 500));
+		} else {
+			let message = '';
+			
+			res.send(common.sendResponse(true, 1, message, result, 0));
+			
+		}
+	} catch(e) {
+        console.log(e)
+        res.send(common.sendResponse(false, 0, 'Something went wrong. Please try again.', null, 1002));
+	}
+});
+router.post('/getInventory', async (req, res) => {
+	try{
+		
+		const result = await dao.getInventory(req.body);
+		//console.log(result)
+		if (result.error) {
+			res.send(common.sendResponse(false, 0, 'Some error occurred', null, 500));
+		} else {
+			let message = '';
+			
+			res.send(common.sendResponse(true, 1, message, result, 0));
+			
+		}
+	} catch(e) {
+        console.log(e)
+        res.send(common.sendResponse(false, 0, 'Something went wrong. Please try again.', null, 1002));
+	}
+});
+function addStocks(arr){
+	var instock = []
+	for (let item of  arr){
+		//instock=[]
+		instock.push(item);
+	}
+
+	return instock
+
+}

@@ -118,3 +118,42 @@ module.exports.allRoles  = () => {
 		}
 	});
 }
+module.exports.addInventory  = (data) => {
+	return new Promise((resolve, reject) => {
+		try {
+			data['_id'] = db.getMongoId()
+			data['inventory_ID'] = data['_id']
+			db.collections.inventory.insert(data,async function (err, success){
+                if (err) {
+                    resolve(common.errorResolve(err))
+                } else {
+                    
+                    resolve(success)
+                }
+            });
+		} catch (e) {
+			console.log(e);
+			resolve('500');
+		}
+	});
+}
+module.exports.getInventory  = (data) => {
+	return new Promise((resolve, reject) => {
+		try {
+			query= {
+				"inventory_ID": data.inventory_ID
+			}
+			db.collections.inventory.find(query,async function (err, success){
+                if (err) {
+                    resolve(common.errorResolve(err))
+                } else {
+                    
+                    resolve(success)
+                }
+            });
+		} catch (e) {
+			console.log(e);
+			resolve('500');
+		}
+	});
+}
